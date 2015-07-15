@@ -3,16 +3,16 @@
     {
       "type": "virtualbox-iso",
       "guest_os_type": "RedHat_64",
-      "iso_checksum": "233293ce1da9bad8f49c13cdb9a0b7d7b88322d083eef2e98eaca3e300520ef1",
+      "iso_checksum": "58568d8664677513a9d1ff11a601c85aa9b9c0faa21155c10a40741e38d6a1bf",
       "iso_checksum_type": "sha256",
-      "iso_url": "http://ftp.ne.jp/Linux/distributions/scientificlinux/6.4/x86_64/iso/SL-64-x86_64-2013-03-18-Install-DVD.iso",
+      "iso_url": "http://ftp.kddilabs.jp/Linux/packages/scientificlinux/6.0/x86_64/iso/SL-60-x86_64-2011-03-03-Install-DVD.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
       "ssh_port": 22,
       "http_directory": "http",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait10><wait10><wait10><wait10><enter>"
       ],
       "boot_wait": "10s",
       "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
@@ -40,10 +40,24 @@
       "compression_level": 9,
       "override": {
         "virtualbox": {
-          "output": "artifacts/scientific-linux-6.4-x64_virtualbox.box"
+          "output": "artifacts/scientific-linux-6.0-x64_virtualbox.box"
         }
       }
+    },
+    {
+      "type": "atlas",
+      "token": "{{user `atlas_token`}}",
+      "artifact": "ringo/scientific-linux-6.0",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "created_at": "{{timestamp}}",
+        "provider": "virtualbox"
+      }
     }
-  ]
+  ],
+  "push": {
+    "name": "ringo/scientific-linux-6_0",
+    "include": ["http/*", "scripts/*"]
+  }
 }
 

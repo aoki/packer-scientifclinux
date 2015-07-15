@@ -3,9 +3,9 @@
     {
       "type": "virtualbox-iso",
       "guest_os_type": "RedHat_64",
-      "iso_checksum": "435681f6837ac81df0386d038782389b513db26081f5c8cea2cfd598ed32af3a",
+      "iso_checksum": "8edc9b64f0622646c5d5e599bcf437175c83abcb15a374d73dc820379e1a443e",
       "iso_checksum_type": "sha256",
-      "iso_url": "http://ftp.kddilabs.jp/Linux/packages/scientificlinux/6.3/x86_64/iso/SL-63-x86_64-2012-08-02-Install-DVD.iso",
+      "iso_url": "http://ftp.kddilabs.jp/Linux/packages/scientificlinux/6.5/x86_64/iso/SL-65-x86_64-2014-01-27-Install-DVD.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
@@ -22,7 +22,8 @@
         ["modifyvm", "{{.Name}}", "--memory", "1024"],
         ["modifyvm", "{{.Name}}", "--cpus", "2"]
       ],
-      "virtualbox_version_file": ".vbox_version"
+      "virtualbox_version_file": ".vbox_version",
+      "headless": true
     }
   ],
   "provisioners": [
@@ -40,10 +41,24 @@
       "compression_level": 9,
       "override": {
         "virtualbox": {
-          "output": "artifacts/scientific-linux-6.3-x64_virtualbox.box"
+          "output": "artifacts/scientific-linux-6.5-x64_virtualbox.box"
         }
       }
+    },
+    {
+      "type": "atlas",
+      "token": "{{user `atlas_token`}}",
+      "artifact": "ringo/scientific-linux-6.5",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "created_at": "{{timestamp}}",
+        "provider": "virtualbox"
+      }
     }
-  ]
+  ],
+  "push": {
+    "name": "ringo/scientific-linux-6_5",
+    "include": ["http/*", "scripts/*"]
+  }
 }
 
