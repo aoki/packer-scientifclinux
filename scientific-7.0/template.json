@@ -35,7 +35,7 @@
       ]
     }
   ],
-  "post-processors": [
+  "post-processors": [[
     {
       "type": "vagrant",
       "compression_level": 9,
@@ -47,6 +47,7 @@
     },
     {
       "type": "atlas",
+      "only": ["virtualbox-iso"],
       "token": "{{user `atlas_token`}}",
       "artifact": "ringo/scientific-linux-7.0",
       "artifact_type": "vagrant.box",
@@ -55,7 +56,7 @@
         "provider": "virtualbox"
       }
     }
-  ],
+  ]],
   "push": {
     "name": "ringo/scientific-linux-7_0",
     "include": ["http/*", "scripts/*"]
