@@ -1,0 +1,65 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "RedHat_64",
+      "iso_checksum": "2789c1fe5d2fdd5bfe3c325e7a522c17628a93fc2fda05fb6791e3ef3bdb4b9f",
+      "iso_checksum_type": "sha256",
+      "iso_url": "http://ftp.riken.jp/Linux/scientific/7.1/x86_64/iso/SL-7-DVD-x86_64-2015-04-07-7.1.iso",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "ssh_port": 22,
+      "http_directory": "http",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "disk_size": 40520,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "1024"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "headless": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | sudo -S /bin/sh {{.Path}}",
+      "scripts": [
+        "scripts/vagrant.sh"
+      ]
+    }
+  ],
+  "post-processors": [[
+    {
+      "type": "vagrant",
+      "compression_level": 9,
+      "override": {
+        "virtualbox": {
+          "output": "artifacts/scientific-linux-7.1-x64_virtualbox.box"
+        }
+      }
+    },
+    {
+      "type": "atlas",
+      "only": ["virtualbox-iso"],
+      "token": "{{user `atlas_token`}}",
+      "artifact": "ringo/scientific-linux-7.1",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "created_at": "{{timestamp}}",
+        "provider": "virtualbox"
+      }
+    }
+  ]],
+  "push": {
+    "name": "ringo/scientific-linux-7_1",
+    "include": ["http/*", "scripts/*"]
+  }
+}
+
