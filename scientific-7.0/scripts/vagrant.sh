@@ -8,8 +8,9 @@ chmod 0600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant:vagrant /home/vagrant/.ssh
 
 printf "# Setup virtual box additions\n"
+/usr/bin/yum -y install ftp://mirror.switch.ch/pool/4/mirror/scientificlinux/7.0/x86_64/os/Packages/kernel-devel-3.10.0-123.el7.x86_64.rpm
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
-mount -o loop /home/vagrant/VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+mount -o loop /home/vagrant/VBoxGuestAdditions_${VBOX_VERSION}.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 rm -rf /home/vagrant/VBoxGuestAdditions_*.iso
